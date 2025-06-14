@@ -119,19 +119,19 @@ const NewsSection = () => {
         </div>
 
         {/* News Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-16">
-          {news.map((item) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {news.slice(0, 3).map((item) => (
             <Card
               key={item.id}
               className="card-rock group cursor-pointer hover:scale-105 transition-all duration-300"
               onClick={() => setSelectedNews(item)}
             >
               <CardContent className="p-0">
-                <div className="relative overflow-hidden rounded-t-xl">
+                <div className="relative overflow-hidden rounded-t-xl aspect-[4/3]">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   
@@ -141,7 +141,7 @@ const NewsSection = () => {
                   </div>
                 </div>
                 
-                <div className="p-6">
+                <div className="p-4">
                   <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-500 transition-colors line-clamp-2">
                     {item.title}
                   </h3>
@@ -162,22 +162,9 @@ const NewsSection = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between mt-4">
+                  <div className="flex items-center justify-end mt-4">
                     <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-400 p-0">
                       Ler Mais
-                    </Button>
-                    
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-400 hover:text-white p-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        shareNews(item);
-                      }}
-                    >
-                      <Share2 className="w-4 h-4 mr-1" />
-                      Compartilhar
                     </Button>
                   </div>
                 </div>
@@ -188,8 +175,15 @@ const NewsSection = () => {
 
         {/* News Modal */}
         {selectedNews && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
-            <div className="bg-gray-900 rounded-xl max-w-4xl max-h-[90vh] overflow-y-auto w-full">
+          <div 
+                className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 md:items-start md:justify-start"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) {
+                    setSelectedNews(null);
+                  }
+                }}
+              >
+            <div className="bg-gray-900 rounded-xl w-[90%] max-w-4xl h-[95vh] relative flex flex-col md:m-auto md:w-[80%] md:h-[80vh]">
               <div className="relative">
                 <img
                   src={selectedNews.image}
@@ -197,6 +191,11 @@ const NewsSection = () => {
                   className="w-full h-64 object-cover rounded-t-xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-t-xl" />
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4 bg-red-600/90 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {selectedNews.category}
+                  </div>
                 
                 <Button
                   variant="ghost"
@@ -208,13 +207,10 @@ const NewsSection = () => {
                 </Button>
               </div>
               
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {selectedNews.category}
-                  </span>
+              <div className="flex-1 p-8 overflow-y-auto h-[calc(100vh-300px)] md:h-[calc(80vh-300px)]">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-4 md:gap-8">
                   
-                  <div className="flex items-center space-x-4 text-sm text-gray-400">
+                  <div className="flex items-center space-x-4 text-sm text-gray-400 md:space-x-8">
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
                       <span>{new Date(selectedNews.date).toLocaleDateString('pt-BR')}</span>
@@ -245,10 +241,7 @@ const NewsSection = () => {
                     Compartilhar Notícia
                   </Button>
                   
-                  <Button variant="ghost" className="text-gray-400 hover:text-white">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Ver Todas as Notícias
-                  </Button>
+                  
                 </div>
               </div>
             </div>
