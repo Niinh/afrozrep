@@ -1,48 +1,72 @@
 'use client';
 
 import { useState } from 'react';
-import { Play, ExternalLink, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
+import { Play } from 'lucide-react';
+import Image from 'next/image';
+
+interface Video {
+  id: string;
+  title: string;
+  subtitle: string;
+  thumbnail: string;
+  start: number;
+}
+
+const videosData: Video[] = [
+  {
+    id: 'PyGPT5jHSw4',
+    title: "ABOLIRAM - Afro'z Rep - Ao Vivo Mostra Cultural - Poções - BA",
+    subtitle: 'Destaques do nosso show Mostra Cultural',
+    thumbnail: 'https://img.youtube.com/vi/PyGPT5jHSw4/maxresdefault.jpg',
+    start: 65,
+  },
+  {
+    id: 'qyHp3zy_ZYM',
+    title: "OITAVO MAR - Afro'z Rep - Ao Vivo Mostra Cultural - Poções - BA",
+    subtitle: 'Videoclipe do nosso último evento',
+    thumbnail: 'https://img.youtube.com/vi/qyHp3zy_ZYM/maxresdefault.jpg',
+    start: 36,
+  },
+  {
+    id: 'fRvIx38Z1uU',
+    title: "MEU AMIGO FRED - Afro'z Rep - Ao Vivo Mostra Cultural - Poções - BA",
+    subtitle: 'Uma olhada no nosso processo criativo',
+    thumbnail: 'https://img.youtube.com/vi/fRvIx38Z1uU/maxresdefault.jpg',
+    start: 0,
+  },
+];
+
+const defaultThumbnail = 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg';
 
 const VideosSection = () => {
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const videos = [
-    {
-      id: 'dQw4w9WgXcQ',
-      title: 'Rock Nacional - Clipe Oficial',
-      description: 'Nosso primeiro single que marca o início de uma nova era do rock brasileiro.',
-      thumbnail: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg',
-      duration: '4:32',
-    },
-    {
-      id: 'dQw4w9WgXcQ',
-      title: 'Energia Pura - Live Session',
-      description: 'Performance ao vivo gravada em estúdio, sentindo a energia em estado bruto.',
-      thumbnail: 'https://images.pexels.com/photos/1032653/pexels-photo-1032653.jpeg',
-      duration: '5:18',
-    },
-    {
-      id: 'dQw4w9WgXcQ',
-      title: 'Resistência - Videoclipe',
-      description: 'Uma mensagem de resistência e força através da música.',
-      thumbnail: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg',
-      duration: '3:45',
-    },
-    {
-      id: 'dQw4w9WgXcQ',
-      title: 'Behind the Scenes - Estúdio',
-      description: 'Veja como criamos nossos hits nos bastidores do estúdio.',
-      thumbnail: 'https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg',
-      duration: '8:12',
-    },
-  ];
+  const handleSelectVideo = (video: Video) => {
+    setSelectedVideo(video);
+    setIsPlaying(false);
+  };
+
+  const handlePlay = () => {
+    if (!selectedVideo) {
+      setSelectedVideo(videosData[0]);
+    }
+    setIsPlaying(true);
+  };
+
+  const getYouTubeEmbedUrl = (video: Video) => {
+    let url = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
+    if (video.start > 0) {
+      url += `&start=${video.start}`;
+    }
+    return url;
+  };
 
   return (
-    <section id="videos" className="py-20 bg-gradient-to-b from-black to-gray-950">
+    <section id="videos" className="py-20 bg-black text-white">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-black text-rock text-gradient mb-4">
             VÍDEOS & CLIPES
@@ -50,96 +74,68 @@ const VideosSection = () => {
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Confira nossos clipes oficiais, performances ao vivo e conteúdo exclusivo dos bastidores.
           </p>
-          <div className="w-32 h-1 bg-gradient-to-r from-red-500 to-yellow-500 mx-auto mt-6" />
+          <div className="w-32 h-1 bg-gradient-to-r from-red-500 to-black-500 mx-auto mt-6" />
         </div>
 
-        {/* Featured Video Player */}
-        {selectedVideo && (
-          <div className="mb-16">
-            <div className="max-w-4xl mx-auto">
-              <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+          {/* Main Video Player */}
+          <div className="lg:col-span-2">
+            <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg shadow-red-500/20">
+              {isPlaying && selectedVideo ? (
                 <iframe
-                  src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
-                  title="Video Player"
+                  key={selectedVideo.id}
+                  src={getYouTubeEmbedUrl(selectedVideo)}
+                  title={selectedVideo.title}
                   className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute top-4 right-4 text-white hover:text-red-500"
-                  onClick={() => setSelectedVideo(null)}
-                >
-                  ✕
-                </Button>
-              </div>
+                ></iframe>
+              ) : (
+                <>
+                  <Image
+                    src={selectedVideo ? selectedVideo.thumbnail : defaultThumbnail}
+                    alt={selectedVideo ? selectedVideo.title : 'Afroz Rep Band'}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <button
+                      onClick={handlePlay}
+                      className="w-20 h-20 bg-red-600/80 rounded-full flex items-center justify-center text-white hover:bg-red-500 transition-all duration-300 hover:scale-110"
+                      aria-label="Play video"
+                    >
+                      <Play className="w-10 h-10 ml-1" fill="currentColor" />
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        )}
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {videos.map((video, index) => (
-            <Card
-              key={index}
-              className="card-rock group cursor-pointer hover:scale-105 transition-all duration-300"
-              onClick={() => setSelectedVideo(video.id)}
-            >
-              <CardContent className="p-0">
-                <div className="relative overflow-hidden rounded-t-xl">
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  
-                  {/* Play Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-red-600/90 rounded-full flex items-center justify-center group-hover:bg-red-500 transition-colors group-hover:scale-110 transform duration-300">
-                      <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
-                    </div>
-                  </div>
-                  
-                  {/* Duration Badge */}
-                  <div className="absolute bottom-4 right-4 bg-black/80 text-white px-2 py-1 rounded text-sm font-medium">
-                    {video.duration}
-                  </div>
+          {/* Video List */}
+          <div className="flex flex-col space-y-4">
+            {videosData.map((video) => (
+              <div
+                key={video.id}
+                onClick={() => handleSelectVideo(video)}
+                className={`flex items-center p-3 rounded-lg cursor-pointer bg-gray-900/50 hover:bg-gray-800/50 transition-all duration-300 border-l-4 ${selectedVideo?.id === video.id ? 'border-red-500' : 'border-transparent'}`}>
+                <div className="relative w-24 h-16 mr-4 flex-shrink-0">
+                    <Image src={video.thumbnail} alt={video.title} fill className="object-cover rounded-md" />
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-500 transition-colors">
+                <div>
+                  <h4 className={`font-semibold text-sm leading-tight transition-colors ${selectedVideo?.id === video.id ? 'text-white' : 'text-gray-400'}`}>
                     {video.title}
-                  </h3>
-                  <p className="text-gray-400 mb-4 leading-relaxed">
-                    {video.description}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-400 p-0">
-                      <Play className="w-4 h-4 mr-2" />
-                      Assistir
-                    </Button>
-                    
-                    <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white p-0">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      YouTube
-                    </Button>
-                  </div>
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-1">{video.subtitle}</p>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* YouTube Channel Link */}
-        <div className="text-center mt-16">
-          <Button className="btn-rock-outline group">
-            <Youtube className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-            Ver Todos os Vídeos no YouTube
-            <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
+              </div>
+            ))}
+            <Button asChild variant="outline" className="mt-4 w-full border-white/50 text-white hover:bg-white hover:text-black transition-colors duration-300">
+              <Link href="https://www.youtube.com/@afrozrep/videos" target="_blank" rel="noopener noreferrer">
+                VER TODOS OS VÍDEOS
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

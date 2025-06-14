@@ -17,7 +17,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10" />
         <img
-          src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg"
+          src="https://images.pexels.com/photos/32437470/pexels-photo-32437470.jpeg"
           alt="Rock Concert Background"
           className="w-full h-full object-cover"
         />

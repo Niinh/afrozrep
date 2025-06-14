@@ -53,7 +53,8 @@ const AboutSection = () => {
     <section id="about" className="py-20 relative overflow-hidden">
       {/* Parallax Background */}
       <div className="absolute inset-0 parallax-bg" style={{
-        backgroundImage: 'url(https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg)',
+        backgroundImage: 'url(https://images.pexels.com/photos/32437470/pexels-photo-32437470.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
+        //* backgroundImage: 'url(https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg)', *//
       }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90" />
       </div>
@@ -82,20 +83,20 @@ const AboutSection = () => {
           <div className="card-rock p-8 md:p-12">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h3 className="text-3xl font-bold text-white mb-6">Nossa História</h3>
+                <h3 className="text-3xl font-bold text-white mb-6">Sinopse</h3>
                 <p className="text-gray-300 leading-relaxed mb-6">
-                  Formada em 2021, a Afro'z Rep surgiu da necessidade de criar algo autêntico no cenário rock nacional. 
-                  Nosso som é uma fusão única que combina a força do rock clássico com elementos contemporâneos, 
-                  criando uma identidade sonora inconfundível.
+                A banda Afro’z Rep surgiu em 2008, na cidade de Poções, interior da Bahia, com o intuito de produzir um som que representasse a cultura local e, ao mesmo tempo, trouxesse elementos da música negra mundial.
                 </p>
                 <p className="text-gray-300 leading-relaxed">
-                  Com influências que vão desde Metallica até bandas nacionais como Sepultura e Legião Urbana, 
-                  desenvolvemos um estilo próprio que ressoa com uma nova geração de fãs do rock brasileiro.
+                O nome da banda faz referência à representatividade negra e à cultura afro-brasileira, buscando valorizar as raízes e a história do povo negro.
+                </p>
+                <p className="text-gray-300 leading-relaxed mb-6">
+                Nossa musicalidade é uma fusão vibrante, o que muitos chamam de música alternativa, pois varia muito em seu instrumental, passeando entre o rap, o reggae, o samba, o funk e o rock.
                 </p>
               </div>
               <div className="relative">
                 <img
-                  src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg"
+                  src="https://images.pexels.com/photos/32453997/pexels-photo-32453997.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt="Afro'z Rep Band"
                   className="rounded-lg shadow-2xl w-full"
                 />
